@@ -26,3 +26,4 @@ To run tests locally using Newman, follow these steps:
 newman run shopping-cart-success -d data/test-data.json -e environment/local.json -r htmlextra --reporter-htmlextra-export ./results/report.html
 #3
 newman run testcases/customer-profile-api/Test_Script_Postman.postman_collection.json -r htmlextra --reporter-htmlextra-export ./results/report.html# automate-postman-example
+# automate-postman-example
