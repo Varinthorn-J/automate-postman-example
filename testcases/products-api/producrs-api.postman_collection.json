@@ -1,0 +1,329 @@
+{
+	"info": {
+		"_postman_id": "e0da5c85-aa8f-4531-8d19-c4d8433b923a",
+		"name": "producrs-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23955704"
+	},
+	"item": [
+		{
+			"name": "createProduct",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Save the response \"_id\" to an environment variable",
+							"pm.test(\"Response body contains product name, product description, and product price\", function () {",
+							"    var response = pm.response.json();",
+							"    pm.expect(response).to.have.property('product_name').that.is.a('string');",
+							"    pm.expect(response).to.have.property('product_desc').that.is.a('string');",
+							"    pm.expect(response).to.have.property('product_price').that.is.a('number');",
+							"    pm.expect(response).to.have.property('_id').that.is.a('string');",
+							"    pm.environment.set(\"id\", response._id);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "api-key-test",
+						"type": "text"
+					},
+					{
+						"key": "x-request-id",
+						"value": "test",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"product_name\": \"{{product_name}}\",\n    \"product_desc\": \"{{product_desc}}\",\n    \"product_price\": {{product_price}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://express-api-mslb.onrender.com/products",
+					"protocol": "https",
+					"host": [
+						"express-api-mslb",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllProduct",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response contains the correct key \", function () {",
+							"    pm.response.json().forEach(function(product) {",
+							"        pm.expect(product).to.have.property('_id');",
+							"        pm.expect(product).to.have.property('product_name');",
+							"        pm.expect(product).to.have.property('product_desc');",
+							"        pm.expect(product).to.have.property('product_price');",
+							"        pm.expect(product).to.have.property('created_at');",
+							"        pm.expect(product).to.have.property('__v');",
+							"    });",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "api-key-test",
+						"type": "text"
+					},
+					{
+						"key": "x-request-id",
+						"value": "test",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"product_name\": \"\",\n    \"product_desc\": \"Tuf Gaming\",\n    \"product_price\": 39900\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://express-api-mslb.onrender.com/products",
+					"protocol": "https",
+					"host": [
+						"express-api-mslb",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllProductById",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var responseId = pm.response.json()._id;",
+							"var envId = pm.environment.get(\"id\");",
+							"",
+							"",
+							"pm.test(\"Response _id should match environment _id\", function () {",
+							"    pm.expect(responseId).to.eql(envId);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "api-key-test",
+						"type": "text"
+					},
+					{
+						"key": "x-request-id",
+						"value": "test",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://express-api-mslb.onrender.com/products/:id",
+					"protocol": "https",
+					"host": [
+						"express-api-mslb",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"products",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "{{id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateProductById",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"  pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"// Save the response \"_id\" to an environment variable",
+							"pm.test(\"Response body contains product name, product description, and product price\", function () {",
+							"    var response = pm.response.json();",
+							"    pm.environment.set(\"id_update\", response._id);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "api-key-test",
+						"type": "text"
+					},
+					{
+						"key": "x-request-id",
+						"value": "test",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"product_name\": \"{{product_name_update}}\",\n    \"product_desc\": \"{{product_desc_update}}\",\n    \"product_price\": {{product_price_update}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://express-api-mslb.onrender.com/products/:id",
+					"protocol": "https",
+					"host": [
+						"express-api-mslb",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"products",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "{{id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteProductById",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "x-api-key",
+						"value": "api-key-test",
+						"type": "text"
+					},
+					{
+						"key": "x-request-id",
+						"value": "test",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://express-api-mslb.onrender.com/products/:id",
+					"protocol": "https",
+					"host": [
+						"express-api-mslb",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"products",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "{{id_update}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "id",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
