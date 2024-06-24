@@ -1,3 +1,2 @@
 npm install -g newman
-
-newman run testcases/collection_qa.json -e environments/collection_qa.postman_environment.json -r htmlextra
+npm install -g newman-reporter-htmlextra
